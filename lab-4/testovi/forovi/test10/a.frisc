@@ -1,0 +1,37 @@
+    MOVE %D 40000, r7
+    MOVE %D 0, r0
+    STORE r0, (V0)
+    PUSH r0
+    MOVE %D -12, r0
+    STORE r0, (V1)
+    PUSH r0
+    MOVE %D -1, r0
+    STORE r0, (V2)
+    MOVE %D -1, r0
+    STORE r0, (DO)
+L0    LOAD r0, (V1)
+    PUSH r0
+    LOAD r0, (V2)
+    PUSH r0
+    POP r1
+    POP r0
+    SUB r0, r1, r2
+    PUSH r2
+    STORE r2, (V1)
+    LOAD R0, (V2)
+    ADD R0, 1, R0
+    STORE R0, (V2)
+    LOAD R0, (V2)
+    LOAD R1, (DO)
+    CMP R0, R1
+    JP_SLE L0
+    POP r0
+    STORE r0, (V1)
+    LOAD r6, (V1)
+    HALT
+
+V0  DW 0
+V1  DW 0
+V2  DW 0
+DO  DW 0
+

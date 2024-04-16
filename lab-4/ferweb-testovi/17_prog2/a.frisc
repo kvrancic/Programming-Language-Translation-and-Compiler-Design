@@ -1,0 +1,166 @@
+    MOVE %D 40000, r7
+    MOVE %D 13, r0
+    STORE r0, (V0)
+    PUSH r0
+    MOVE %D 14, r0
+    STORE r0, (V1)
+    PUSH r0
+    LOAD r0, (V0)
+    PUSH r0
+    LOAD r0, (V1)
+    PUSH r0
+    POP r1
+    POP r0
+    ADD r0, r1, r2
+    PUSH r2
+    STORE r2, (V2)
+    MOVE %D 13, r0
+    STORE r0, (V2)
+    PUSH r0
+    POP r1
+    POP r0
+    SUB r0, r1, r2
+    PUSH r2
+    STORE r2, (V2)
+    LOAD r0, (V0)
+    PUSH r0
+    LOAD r0, (V1)
+    PUSH r0
+    POP r1
+    POP r0
+    ADD r0, r1, r2
+    PUSH r2
+    STORE r2, (V3)
+    LOAD r0, (V2)
+    PUSH r0
+    POP r1
+    POP r0
+    ADD r0, r1, r2
+    PUSH r2
+    STORE r2, (V3)
+    MOVE %D 2, r0
+    STORE r0, (V4)
+    PUSH r0
+    LOAD r0, (V0)
+    PUSH r0
+    CALL MUL
+    LOAD r0, (V1)
+    PUSH r0
+    POP r1
+    POP r0
+    ADD r0, r1, r2
+    PUSH r2
+    STORE r2, (V4)
+    LOAD r0, (V2)
+    PUSH r0
+    POP r1
+    POP r0
+    ADD r0, r1, r2
+    PUSH r2
+    STORE r2, (V4)
+    LOAD r0, (V3)
+    PUSH r0
+    POP r1
+    POP r0
+    ADD r0, r1, r2
+    PUSH r2
+    STORE r2, (V4)
+    LOAD r0, (V4)
+    PUSH r0
+    MOVE %D 2, r0
+    STORE r0, (V4)
+    PUSH r0
+    LOAD r0, (V0)
+    PUSH r0
+    CALL MUL
+    POP r1
+    POP r0
+    SUB r0, r1, r2
+    PUSH r2
+    STORE r2, (V4)
+    LOAD r0, (V4)
+    PUSH r0
+    LOAD r0, (V1)
+    PUSH r0
+    POP r1
+    POP r0
+    SUB r0, r1, r2
+    PUSH r2
+    STORE r2, (V4)
+    LOAD r0, (V4)
+    PUSH r0
+    LOAD r0, (V2)
+    PUSH r0
+    POP r1
+    POP r0
+    SUB r0, r1, r2
+    PUSH r2
+    STORE r2, (V4)
+    LOAD r0, (V4)
+    PUSH r0
+    LOAD r0, (V3)
+    PUSH r0
+    POP r1
+    POP r0
+    ADD r0, r1, r2
+    PUSH r2
+    STORE r2, (V4)
+    POP r0
+    STORE r0, (V4)
+    LOAD r6, (V4)
+    HALT
+
+V0  DW 0
+V1  DW 0
+V2  DW 0
+V3  DW 0
+V4  DW 0
+DO  DW 0
+
+MD_SGN MOVE 0, R6
+   XOR R0, 0, R0
+   JP_P MD_TST1
+   XOR R0, -1, R0
+   ADD R0, 1, R0
+   MOVE 1, R6
+MD_TST1 XOR R1, 0, R1
+   JP_P MD_SGNR
+   XOR R1, -1, R1
+   ADD R1, 1, R1
+   XOR R6, 1, R6
+MD_SGNR RET
+MD_INIT POP R4
+   POP R3
+   POP R1
+   POP R0
+   CALL MD_SGN
+   MOVE 0, R2
+   PUSH R4
+   RET
+MD_RET XOR R6, 0, R6
+   JP_Z MD_RET1
+   XOR R2, -1, R2
+   ADD R2, 1, R2
+MD_RET1 POP R4
+   PUSH R2
+   PUSH R3
+   PUSH R4
+   RET
+MUL CALL MD_INIT
+   XOR R1, 0, R1
+   JP_Z MUL_RET
+   SUB R1, 1, R1
+MUL_1  ADD R2, R0, R2
+   SUB R1, 1, R1
+   JP_NN MUL_1
+MUL_RET CALL MD_RET
+   RET
+DIV CALL MD_INIT
+   XOR R1, 0, R1
+   JP_Z DIV_RET
+DIV_1  ADD R2, 1, R2
+   SUB R0, R1, R0
+   JP_NN DIV_1
+   SUB R2, 1, R2
+DIV_RET CALL MD_RET
+   RET

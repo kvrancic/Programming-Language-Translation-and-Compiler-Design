@@ -1,0 +1,12 @@
+    MOVE %D 40000, r7
+    MOVE %D 1, r0
+    STORE r0, (V0)
+    PUSH r0
+    POP r0
+    STORE r0, (V0)
+    LOAD r6, (V0)
+    HALT
+
+V0  DW 0
+DO  DW 0
+
